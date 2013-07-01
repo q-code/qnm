@@ -1,0 +1,21 @@
+<?php
+$L['map']['Show_map']='Afficher la carte';
+$L['map']['Hide_map']='Masquer la carte';
+$L['map']['position']='Position';
+$L['map']['addrlatlng']='Adresse, coordonn&eacute;es';
+$L['map']['H_addrlatlng']='Enter une adresse ou une latitude,longitude';
+$L['map']['View_item']='Voir le profil';
+$L['map']['cancreate']='Vous pouvez d&eacute;finir une localisation';
+$L['map']['canmove']='Vous pouvez d&eacute;placer le point';
+$L['map']['editmove']='Editer le premier message pour d&eacute;placer le point';
+$L['map']['undo']='Annuler';
+$L['map']['pntdelete']='Effacer le point';
+$L['map']['pntadd']='Cr&eacute;er un point';
+$L['map']['H_pntadd']='Placer ma position ici, au centre de la carte...';
+$L['map']['pntmove']='Placer ma position ici';
+$L['map']['H_pntmove']='Vous pouvez continuer &agrave; d&eacute;placer le point<br/>avant de fixer le point sur cette position';
+$L['map']['zoomtoall']='Zoomer sur tous les points';
+$L['map']['items']='Cette page contient %s ayant des coordonn&eacute;es (total %s)';
+$L['map']['E_noposition']='Pas de localisation cartographique...';
+$L['map']['E_noaddr']='D&eacute;sol&eacute;, il n\'a pas &eacute;té possible de g&eacute;ocoder cette adresse';
+$L['map']['In_google']='Ouvrir dans Google map';

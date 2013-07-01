@@ -1,0 +1,1 @@
+This module will export the content of the database to a xml file. Only element messages (and author name) will be exported. Section description and member's profiles are skipped.

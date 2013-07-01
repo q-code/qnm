@@ -1,0 +1,1 @@
+This module will import QNM  data. Only element messages with their replies (and author name) will be imported. Elements and posts will be imported in one section.
