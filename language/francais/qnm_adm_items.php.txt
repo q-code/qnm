@@ -1,0 +1,1 @@
+You can here move, delete or prune elements per section. Prune means: delete un-replied elements older than a certain number of days. The number of elements that can be pruned, as displayed in the last column, depends on the number of days (defined bellow this table).

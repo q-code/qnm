@@ -1,0 +1,1 @@
+There are two types of section: <b><i>Visible</i></b> where elements are visible by the board community, and <b><i>Hidden</i></b> meaning that the section is for the staff members only. When you turn the status of a section to <b><i>Frozen</i></b>, adding and editing elements will not be possible (except for Staff members).

@@ -1,0 +1,1 @@
+Vous pouvez ici mettre à jour les statistiques des sections. Le nombre de tickets, messages (et tickets ferm&eacute;s) peut &ecirc;tre erron&eacute; si vous importez ou effacez des ticekts avec un outil de database query externe. S&eacute;lectionnez ici les sectionses pour lesquelles il faut recalculer les statistiques.

@@ -1,0 +1,56 @@
+/* DEFAULT STYLE */
+
+body {margin:5px; padding:0; color:#000000; background-color:#EEEEEE; font-family:Verdana, Arial, sans-serif}
+form {display:inline}
+td {vertical-align:middle}
+img {border-width:0}
+
+a,p,select,input,textarea,td {font-size:9pt}
+h1, h2 {margin-top:10px; margin-bottom:5px; font-weight:bold}
+h1 {font-size:14pt}
+h2 {font-size:12pt}
+a {color:#0000FF; background-color:inherit; text-decoration:none}
+a.visited {color:#551A8B; background-color:inherit}
+a:hover {color:#0000FF; background-color:inherit; text-decoration:underline}
+
+.disabled {color:#888888; background-color:inherit; font-size:8pt}
+.small {font-size:8pt}
+.right {text-align:right}
+.error {color:#ff0000; background-color:inherit; font-size:8pt; font-weight:bold; font-style:italic}
+.warning {color:#ff0000; background-color:inherit}
+.help {font-size:8pt}
+.success {color:#00BB00;font-weight:bold}
+.failed {color:#ff0000;font-weight:bold}
+
+table.hidden {margin:0; width:100%; border-width:0}
+td.hidden {padding:0; vertical-align:top}
+
+#topparticipants {}
+#pager_zt {text-align:right; vertical-align:bottom}
+#pager_zb {text-align:right; vertical-align:top}
+
+/* PAGE CONTAINER */
+
+div.page {margin:10px auto; width:780px; border:solid 1px #104E8F}
+div.body {padding:10px}
+
+/* BANNER FOOTER */
+
+div.banner {width:100%; background-image:url(i_banner.gif); background-repeat:repeat-x}
+div.banner_in {padding:0; vertical-align:bottom}
+div.footer {margin:2px 0 2px 0; padding:0; width:100%}
+a.footer_menu {color:blue; background-color:inherit; font-size:8pt}
+
+div.footer_copy {margin:0; padding:0}
+p.footer_copy {margin:0; padding:0; text-align:right}
+
+/* HELP */
+
+div.setup_help {margin-left:10px; padding-left:10px; border-left:2px dotted #cccccc; font-size:8pt; color:#000099; background-color:inherit}
+div.setup_err {margin:5px auto 5px auto; padding:5px 10px 5px 10px; width:90%; color:inherit; background-color:#FFFFCC; border:1px solid #FF9900}
+div.setup_ok {margin:5px auto 5px auto; padding:5px 10px 5px 10px; width:90%; color:inherit; background-color:#CCFFCC; border:1px solid #99FF00}
+
+/* BUTTON */
+
+table.button {padding:0; width:100%}
+td.button {height:25px; border:1px solid #AAAAAA; text-align:center; background-image:url(i_button.gif); background-repeat:repeat-x}

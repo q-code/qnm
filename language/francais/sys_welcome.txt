@@ -1,0 +1,1 @@
+Bienvenue dans Q-NetManagement. Si c'est votre premi&egrave;re visite, n'h&eacute;sitez pas a lire la <a class="welcome" href="qnm_faq.php">FAQ</a>. Vous devrez vous enregistrer avant de pouvoir utiliser la plupart des fonctionnalit&eacute;s : cliquez le lien <a class="welcome" href="qnm_user_new.php">s'enregistrer</a> pour savoir comment proc&eacute;der.

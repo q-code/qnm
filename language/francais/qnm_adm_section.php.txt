@@ -1,0 +1,1 @@
+Il y a deux types de section : <b><i>Visible</i></b> o&ugrave; les tickets sont visibles par tous les membres et <b><i>Cach&eacute;</i></b> r&eacute;serv&eacute;s aux membres du staff. Lorsque vous passez au statut <b><i>Ferm&eacute;</i></b>, il ne sera plus possible d'y ajouter des tickets (sauf pour les membres du staff).

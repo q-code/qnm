@@ -1,0 +1,2 @@
+The categories are <b>tags</b> the users can attach to a element. These categories are used to group elements or to generate statistics on a specific subset of elements. The categories a user can attach are free. Nevertheless, if a list of categories is defined, the system will present these <b>proposed categories</b> in a drop-down list. See this <a href="qnm_ext_tagshelp.php" target="_blank" class="small">help page</a>, for more information.
+

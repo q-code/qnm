@@ -1,0 +1,1 @@
+You can here move, delete or restore elements per section. You can also move or delete only inactive elements.

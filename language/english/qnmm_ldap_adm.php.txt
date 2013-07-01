@@ -1,0 +1,1 @@
+This module allows you defining your LDAP configuration and login behaviour. When the module settings are defined and tested, you have to <b>activate</b> it by selecting this ldap module as authority in the <b>Security</b> page.

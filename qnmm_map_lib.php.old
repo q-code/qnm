@@ -1,0 +1,541 @@
+<?php
+
+/* ============
+* qnmm_map_lib.php
+* ------------
+* version: 2.5 build:20101222
+* This is a module library
+* ------------
+* class cMapPoint
+* QTgempty()
+* QTgpoint()
+* QTgpointdelete()
+* QTgmapscript()
+* QTgmappoints()
+*/
+
+class cMapPoint
+{
+  // Properties
+
+  public $y = 4.352;
+  public $x = 50.847;
+  public $title = ''; // marker tips
+  public $info = '';  // html to display on click
+  public $icon = false;
+  public $shadow = false;
+  public $printicon = false;
+  public $printshadow = false;
+
+  // Class constructor
+
+  function cMapPoint($y,$x,$title='',$info='',$arrStyle=array())
+  {
+    if ( isset($y) && isset($x) )
+    {
+      $this->y = $y;
+      $this->x = $x;
+    }
+    else
+    {
+      if ( isset($_SESSION[QT]['m_map_gcenter']) )
+      {
+      $this->y = floatval(QTgety($_SESSION[QT]['m_map_gcenter']));
+      $this->x = floatval(QTgetx($_SESSION[QT]['m_map_gcenter']));
+      }
+    }
+    if ( !empty($title) ) $this->title = $title;
+    if ( !empty($info) ) $this->info = $info;
+    if ( !empty($arrStyle) ) $this->StyleFromArray($arrStyle);
+  }
+
+  // Methods
+  
+  function StyleFromArray($arr)
+  {
+    if ( !is_array($arr)) die('cMapPoint::MakeFromArray: Invalid arg, requires an array.');
+    if ( isset($arr['icon']) && $arr['icon']!='0' ) $this->icon = $arr['icon'];
+    if ( isset($arr['shadow']) && $arr['shadow']=='1' ) $this->shadow = true;
+    if ( isset($arr['printicon']) && $arr['printicon']=='1' ) $this->printicon = true;
+    if ( isset($arr['printshadow']) && $arr['printshadow']=='1' ) $this->printshadow = true;
+  }
+
+  function MarkerWith($str='shadow')
+  {
+    if ( $str=='shadow' )     { if ( $this->icon && $this->shadow ) return 'true'; }
+    if ( $str=='printicon' )  { if ( $this->icon && $this->printicon ) return 'true'; }
+    if ( $str=='printshadow' ){ if ( $this->icon && $this->printshadow ) return 'true'; }
+    return 'false';
+  }
+}
+
+// Attention x,y,z MUST be FLOAT (or null) !!!
+// If x,y,z are NULL or not float, these functions will returns FALSE.
+// When entity (topic) is created, the x,y,z are null (i.e. no point, no display)
+
+// ---------
+
+// QTgempty
+// Return true when $i is empty or a value starting with '0.000000'
+
+function QTgempty($i)
+{
+  if ( empty($i) ) return true;
+  if ( !is_string($i) && !is_float($i) && !is_int($i) ) die('QTgempty: Invalid argument #1');
+  if ( substr((string)$i,0,8)=='0.000000' ) return true;
+  return false;  
+}
+
+// ---------
+
+
+// QTgcanmap
+// $strSection is 'S' search result, or 'i' the section id
+// 'U' means user profile, thus is true by definition
+
+function QTgcanmap($strSection=null,$strRole='')
+{
+  // Check
+
+  if ( !isset($strSection) ) die('QTgcanmap: arg #1 must be a section ref');
+  if ( !is_string($strRole) ) die('QTgcanmap: arg #2 must be an string');
+
+  // Check module
+
+  if ( !isset($_SESSION[QT]['m_map_gkey']) ) return FALSE;
+  if ( empty($_SESSION[QT]['m_map_gkey']) ) return FALSE;
+
+  // Added section registery if missing
+
+  global $oVIP;
+  
+  if ( !isset($_SESSION[QT]['m_map']) )
+  {
+    $_SESSION[QT]['m_map'] = array();
+    if ( file_exists('qnmm_map/config.php') ) require_once('qnmm_map/config.php');
+
+      foreach($oVIP->sections as $intSecid=>$strSectitle)
+      {
+      if ( !isset($_SESSION[QT]['m_map']['s'.$intSecid]) ) $_SESSION[QT]['m_map']['s'.$intSecid] = 'set=0';
+      }
+      if ( !isset($_SESSION[QT]['m_map']['sS']) ) $_SESSION[QT]['m_map']['sS'] = 'set=0';
+      if ( !isset($_SESSION[QT]['m_map']['sU']) ) $_SESSION[QT]['m_map']['sU'] = 'set=0';
+  }
+
+  // check section
+  if ( !isset($_SESSION[QT]['m_map']['s'.$strSection]) ) return FALSE;
+  $arr = QTexplode($_SESSION[QT]['m_map']['s'.$strSection]);
+  if ( $arr['set']!='1' ) return FALSE;
+
+  // check section list access right
+  if ( !empty($strRole) )
+  {
+    if ( !isset($arr['list']) || $arr['list']=='0' || $arr['list']=='N' ) return FALSE;
+    if ( $arr['list']=='M' && $strRole=='V' ) return FALSE;
+    if ( $arr['list']=='M' && $strRole=='U' ) return FALSE;
+  }
+
+  // exit
+  return TRUE;
+
+}
+
+// ---------
+
+// QTgpoint
+// This moves a point to a new location
+
+function QTgpoint($table=null,$t=null,$y=null,$x=null,$pk='id')
+{
+  if ( !is_string($table) || !is_string($pk) ) die('QTgpointdelete: arg must be an string');
+  if ( !is_int($t) ) die('QTgpoint: arg #3 must be an int');
+  if ( !is_float($y) ) die('QTgpoint: arg #y must be a float');
+  if ( !is_float($x) ) die('QTgpoint: arg #x must be a float');
+
+  global $oDB;
+  $oDB->Query('UPDATE '.$table.' SET y='.$y.',x='.$x.' WHERE '.$pk.'='.$t);
+}
+
+// ---------
+
+function QTgpointdelete($table=null,$t=null,$pk='id')
+{
+  if ( !is_string($table) || !is_string($pk) ) die('QTgpointdelete: arg must be an string');
+  if ( !is_int($t) ) die('QTgpointdelete: arg #2 must be an int');
+
+  global $oDB;
+  $oDB->Query('UPDATE '.$table.' SET y=NULL,x=NULL WHERE '.$pk.'='.$t);
+}
+
+// ---------
+
+function QTgmapscript($strAddLibrary='')
+{
+return '<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$_SESSION[QT]['m_map_gkey'].'"></script>'.(empty($strAddLibrary) ? '' : '<script type="text/javascript" src="'.$strAddLibrary.'"></script>');
+}
+
+// ---------
+
+// QTgmappoints
+// This returns a gmap javascript (return FALSE otherwise)
+// The map is centered on the point x,y and includes the $arrExtData as markers
+
+function QTgmappoints($bCompact=false,$y=null,$x=null,$strMarkerType='',$arrPoints=array(),$bGeocode=false)
+{
+  QTargs('QTgmappoints',array($bCompact,$y,$x,$strMarkerType,$arrPoints,$bGeocode),array('boo','flo','flo','str','arr','boo'));
+
+  global $L;
+
+  // map type
+  switch (substr($_SESSION[QT]['m_map_gbuttons'],0,1))
+  {
+  case 'S': $strMapType = 'G_SATELLITE_MAP'; break;
+  case 'H': $strMapType = 'G_HYBRID_MAP'; break;
+  case 'P': $strMapType = 'G_PHYSICAL_MAP'; break;
+  default:  $strMapType = 'G_NORMAL_MAP'; break;
+  }
+
+  // map options
+  $strMapOptions = '';
+  if ( substr($_SESSION[QT]['m_map_gbuttons'],1,1)=='1' ) $strMapOptions .= 'map.addControl(new '.($bCompact ? 'GSmallZoomControl3D() ' : 'GLargeMapControl3D() ').');';
+  if ( substr($_SESSION[QT]['m_map_gbuttons'],2,1)=='1' ) $strMapOptions .= 'var mapControl = new GHierarchicalMapTypeControl(); mapControl.clearRelationships(); mapControl.addRelationship(G_SATELLITE_MAP, G_HYBRID_MAP, "Labels", false); map.addControl(mapControl); map.addMapType(G_PHYSICAL_MAP);';
+  if ( substr($_SESSION[QT]['m_map_gbuttons'],3,1)=='1' ) $strMapOptions .= 'var bottomLeft = new GControlPosition(G_ANCHOR_BOTTOM_LEFT, new GSize(3,36)); map.addControl(new GScaleControl(), bottomLeft);';
+  if ( substr($_SESSION[QT]['m_map_gbuttons'],4,1)=='1' && !$bCompact ) $strMapOptions .= 'map.addControl(new GOverviewMapControl());';
+  if ( substr($_SESSION[QT]['m_map_gbuttons'],5,1)=='1' ) $strMapOptions .= 'map.enableScrollWheelZoom();';
+
+  // make the java map
+  $strReturn = '
+  var map = null;'.($bGeocode ? ' var geocoder = null;' : '').'
+  var mgr = null;
+  var arrMarkers = [];
+  var marker = null;
+  function mapload()
+  {
+    if (GBrowserIsCompatible())
+    {
+      map = new GMap2(document.getElementById("map_canvas"));'.($bGeocode ? ' geocoder = new GClientGeocoder();' : '').'
+      map.disableDoubleClickZoom();'.$strMapOptions.'
+      var center = new GLatLng('.$y.', '.$x.');
+      map.setCenter(center, '.$_SESSION[QT]['m_map_gzoom'].', '.$strMapType.');
+      map.savePosition();';
+    if ( count($arrPoints)>0 ) {
+    foreach($arrPoints as $oPoint) {
+    if ( $oPoint->y!=0 && $oPoint->x!=0 ) {
+      $strReturn .= '
+      var marker = getMarker("'.$strMarkerType.'",new GLatLng('.$oPoint->y.','.$oPoint->x.'),'.(!empty($oPoint->title) ? '\''.addslashes($oPoint->title).'\'' : 'null').','.(isset($oPoint->info) ? '\''.$oPoint->info.'\'' : 'null').','.( $oPoint->icon ? '\''.$oPoint->icon.'\'' : 'null').','.$oPoint->MarkerWith('shadow').','.$oPoint->MarkerWith('printicon').','.$oPoint->MarkerWith('printshadow').');
+      map.addOverlay(marker);
+      arrMarkers.push(marker);
+      ';
+    }}}
+  $strReturn .= '
+    }
+  }
+  function getMarker(type, posn, title, info, strIcon, bShadow, bPrintIcon, bPrintShadow)
+  {
+    var icon = new GIcon(G_DEFAULT_ICON);
+    if ( strIcon )
+    {
+      icon.image = "qnmm_map/"+strIcon+".png";
+      if ( bShadow ) { icon.shadow = "qnmm_map/"+strIcon+"_shadow.png"; } else { icon.shadow = null; }
+      if ( bPrintIcon ) { icon.printImage = "qnmm_map/"+strIcon+".gif";icon.mozPrintImage = "qnmm_map/"+strIcon+".gif"; } else { icon.printImage = null; icon.mozPrintImage = null; }
+      if ( bPrintShadow ) { icon.printShadow = "qnmm_map/"+strIcon+"_shadow.gif"; } else { icon.printShadow = null; }
+      icon.iconSize = new GSize(32, 32);
+      icon.shadowSize = new GSize(59, 32);
+      icon.iconAnchor = new GPoint(14, 32);
+    }
+    if ( type=="click" )
+    {
+    var m = new GMarker(posn, {icon: icon, title: title, draggable: false });
+    GEvent.addListener(m, "click", function() { m.openInfoWindowHtml(info); } );
+    return m;
+    }
+    if ( type=="drag" )
+    {
+    var m = new GMarker(posn, {icon: icon, title: title, draggable: true });
+    GEvent.addListener(m, "dragstart", function() { map.closeInfoWindow(); } );
+    GEvent.addListener(m, "dragend", function() { updateLatLngField(m); } );
+    return m;
+    }
+    var m = new GMarker(posn, {icon: icon, title: title, draggable: false });
+    return m;
+  }
+  function getBoundingBox(arrPoints)
+  {
+    if ( arrPoints.length==0 ) return null;
+    var min_y = 90.0;
+    var max_y = -90.0;
+    var min_x = 180.0;
+    var max_x = -180.0;
+    var i;
+    for ( i in arrPoints)
+    {
+      if (arrPoints[i].getLatLng().lat()<min_y) min_y=arrPoints[i].getLatLng().lat();
+      if (arrPoints[i].getLatLng().lng()<min_x) min_x=arrPoints[i].getLatLng().lng();
+      if (arrPoints[i].getLatLng().lat()>max_y) max_y=arrPoints[i].getLatLng().lat();
+      if (arrPoints[i].getLatLng().lng()>max_x) max_x=arrPoints[i].getLatLng().lng();
+    }
+    return new GLatLngBounds(new GLatLng(min_y,min_x),new GLatLng(max_y,max_x));
+  }
+  function zoomToFullExtend()
+  {
+    if ( arrMarkers.length==0 ) return null;
+    var bb = getBoundingBox(arrMarkers);
+    var c = bb.getCenter();
+    map.setCenter(c,map.getBoundsZoomLevel(bb));
+    return null;
+  }
+  ';
+  if ( $strMarkerType=='drag' )
+  {
+  $strReturn .= '
+  function updateLatLngField(marker)
+  {
+    if ( !marker ) { document.getElementById("m_map_gcenter").value=""; updateLatLngLink(); return null; }
+    map.setCenter(marker.getLatLng());
+    document.getElementById("m_map_gcenter").value = marker.getLatLng().lat() + "," + marker.getLatLng().lng();
+    updateLatLngLink();
+    return null;
+  }
+  function updateLatLngLink()
+  {
+    if ( document.getElementById("m_map_coord") ) document.getElementById("m_map_coord").value = document.getElementById("m_map_gcenter").value;
+    return null;
+  }
+  function createMarker()
+  {
+    map.clearOverlays();
+    map.closeInfoWindow();
+    marker = new GMarker(map.getCenter(), {draggable: true});
+    GEvent.addListener( marker, "dragstart", function() { map.closeInfoWindow(); } );
+    GEvent.addListener( marker, "dragend", function() { updateLatLngField(marker); } );
+    map.addOverlay(marker);
+    updateLatLngField(marker);
+    return null;
+  }
+  function deleteMarker()
+  {
+    map.clearOverlays();
+    map.closeInfoWindow();
+    updateLatLngField(null);
+    return null;
+  }
+  function undoChanges()
+  {
+    map.clearOverlays();
+    map.closeInfoWindow();
+    map.returnToSavedPosition();
+    map.setCenter(map.getCenter(), '.$_SESSION[QT]['m_map_gzoom'].', '.$strMapType.');
+    marker = new GMarker(map.getCenter(), {draggable: true});
+    GEvent.addListener( marker, "dragstart", function() { map.closeInfoWindow(); } );
+    GEvent.addListener( marker, "dragend", function() { updateLatLngField(marker); } );
+    map.addOverlay(marker);
+    updateLatLngField(marker);
+    return null;
+  }
+  ';
+  }
+  if ( $bGeocode )
+  {
+  $strReturn .= '
+  function showLocation(address)
+  {
+    geocoder.getLocations(address, addAddressToMap);
+    return null;
+  }
+  function movetotrymarker(marker,trymarker)
+  {
+    if ( !marker ) { marker = new GMarker(map.getCenter(), {draggable: true}); }
+    map.clearOverlays();
+    map.closeInfoWindow();
+    map.setCenter(trymarker.getLatLng());
+    marker.setPoint(trymarker.getLatLng());
+    map.addOverlay(marker);
+    updateLatLngField(marker);
+    return null;
+  }
+  function addAddressToMap(response)
+  {
+    if (!response || response.Status.code != 200) {
+      alert(qtHtmldecode("'.$L['map']['E_noaddr'].'"));
+    } else {
+      //map.clearOverlays();
+      place = response.Placemark[0];
+      point = new GLatLng(place.Point.coordinates[1],
+                          place.Point.coordinates[0]);
+      map.setCenter(point);
+
+      // Create our try marker icon
+      var baseIcon = new GIcon(G_DEFAULT_ICON);
+      baseIcon.image = "qnmm_map/point_yellow.png";
+      baseIcon.shadow = null;
+      baseIcon.iconSize = new GSize(32, 32);
+      baseIcon.iconAnchor = new GPoint(16, 32);
+
+      // Create try marker
+      trymarker = new GMarker(point, { icon:baseIcon, draggable:true });
+      GEvent.addListener( trymarker, "dragstart", function() { map.closeInfoWindow(); } );
+      GEvent.addListener( trymarker, "dragend", function() { trymarker.openInfoWindowHtml(\'<a class="small" href="javascript:void(0)" onclick="movetotrymarker(marker,trymarker);">'.$L['map']['pntmove'].'</a><br /><span class="small">'.$L['map']['H_pntmove'].'</span>\'); } );
+      map.addOverlay(trymarker);
+      trymarker.openInfoWindowHtml(\'<a class="small" href="javascript:void(0)" onclick ="movetotrymarker(marker,trymarker);">'.$L['map']['pntmove'].'</a><br /><span class="small">'.$L['map']['H_pntmove'].'</span>\');
+    }
+    return null;
+  }
+  ';
+  }
+  return $strReturn;
+}
+
+// ---------
+
+function QTgmaptopic($aTopic=null)
+{
+  // checks
+  if ( !isset($aTopic) ) die('QTgmaptopic: arg #1 must be a topic');
+
+  // uses QTgmapoint
+  if ( is_float($aTopic->x) && is_float($aTopic->y) ) return QTgmappoint($aTopic->id,$aTopic->x,$aTopic->y);
+
+  // return false in case of problem
+  return false;
+}
+
+// ---------
+
+function QTgetx($str=null)
+{
+  if ( !is_string($str) ) return 0.0;
+  $arr = explode(',',$str);
+  if ( count($arr)!=2 ) return 0.0;
+  $str = trim($arr[1]);
+  if ( !is_numeric($str) ) return 0.0;
+  Return floatval($str);
+}
+function QTgety($str=null)
+{
+  if ( !is_string($str) ) return 0.0;
+  $arr = explode(',',$str);
+  if ( count($arr)!=2 ) return 0.0;
+  $str = trim($arr[0]);
+  if ( !is_numeric($str) ) return 0.0;
+  Return floatval($str);
+}
+
+// ---------
+
+function QTstr2yx($str)
+{
+  // check
+  
+  if ( !is_string($str) ) die('QTstr2dd: arg #1 must be a string');
+  $str = trim($str);
+  $str = str_replace('+','',$str);
+  $str = str_replace(';',',',$str);
+  $arr = explode(',',$str);
+  if ( count($arr)!=2 ) return false;
+
+  // analyse each values
+  
+  foreach($arr as $intKey=>$str)
+  {
+    $str = trim(strtoupper($str));
+    if ( substr($str,0,1)=='N' || substr($str,0,1)=='E' ) $str = substr($str,1);
+    if ( substr($str,0,1)=='S' || substr($str,0,1)=='W' ) $str = '-'.substr($str,1);
+    if ( substr($str,-1,1)=='N' || substr($str,-1,1)=='E' ) $str = trim(substr($str,0,-1));
+    if ( substr($str,-1,1)=='S' || substr($str,-1,1)=='W' ) $str = '-'.trim(substr($str,0,-1));
+    $str = str_replace('--','-',$str);
+
+    // convert dms to dd
+    if ( strstr($str,'D') || strstr($str,'°') || strstr($str,"'") || strstr($str,'"') || strstr($str,'´') )
+    {
+      $str = str_replace(array('SEC','S',"''",'´´','"'),'/',$str);
+      $str = str_replace(array('MIN','M',"'",'´'),'/',$str);
+      $str = str_replace(array('DEG','D','°',':'),'/',$str);
+      if ( substr($str,-1,1)=='/' ) $str = substr($str,0,-1);
+      $arrValues = explode('/',$str);
+      $intD = intval($arrValues[0]); if ( !QTisbetween($intD,($intKey==0 ? -90 : -180),($intKey==0 ? 90 : 180)) ) return false;
+      $intM = 0;
+      $intS = 0;
+      if ( isset($arrValues[1]) ) { $intM = intval($arrValues[1]); if ( !QTisbetween($intM,0,59) ) return false; }
+      if ( isset($arrValues[2]) ) { $intS = intval($arrValues[2]); if ( !QTisbetween($intS,0,59) ) return false; }
+      $str = $intD+($intM/60)+($intS/3600);
+    }
+
+    if ( !QTisbetween(intval($str),($intKey==0 ? -90 : -180),($intKey==0 ? 90 : 180)) ) return false;
+    $arr[$intKey]=$str;
+  }
+  
+  // returns 2 dd in a string
+
+  return $arr[0].','.$arr[1];
+}
+
+// ---------
+
+function QTdd2dms($dd,$intDec=0)
+{
+  $dms_d = intval($dd);
+  $dd_m = abs($dd - $dms_d);
+  $dms_m_float = 60 * $dd_m; 
+  $dms_m = intval($dms_m_float);
+  $dd_s = abs($dms_m_float - $dms_m);
+  $dms_s = 60 * $dd_s;
+  return $dms_d.'&#176;'.$dms_m.'&#039;'.round($dms_s,$intDec).'&quot;';
+}
+
+// ---------
+
+function QTgmapZoomControl($arrPoints)
+{
+  if ( !is_array($arrPoints) ) die('QTgmapZoomControl: arg #1 must be an array');
+
+  $str='';
+  global $L;
+  if ( count($arrPoints)>1 )
+  {
+    $str .= '<p class="gmap" style="margin:0 0 4px 0"><a class="gmap" href="javascript:void(0)" onclick="zoomToFullExtend(); return false;">'.$L['map']['zoomtoall'].'</a> | '.$L['Goto'].' <select class="gmap" id="zoomto" name="zoomto" size="1" onchange="map.setCenter(eval(this.value));">';
+    $str .= '<option class="gmap" value="new GLatLng('.QTgety($_SESSION[QT]['m_map_gcenter']).','.QTgetx($_SESSION[QT]['m_map_gcenter']).')"> </option>';
+    $i=0;
+    foreach($arrPoints as $intKey=>$oMapPoint)
+    {
+    $str .= '<option class="gmap" value="new GLatLng('.$oMapPoint->y.','.$oMapPoint->x.')">'.$oMapPoint->title.'</option>';
+    $i++; if ( $i>15 ) break;
+    }
+    $str .= '</select></p>';
+  }
+  return $str;
+}
+
+// ---------
+
+function QTgmapCenter($arrPoints,$str='')
+{
+  QTargs('QTgmapCenter',array($arrPoints,$str),array('arr','str'));
+
+  $y = floatval(QTgety($_SESSION[QT]['m_map_gcenter']));
+  $x = floatval(QTgetx($_SESSION[QT]['m_map_gcenter']));
+  switch($str)
+  {
+  case 'first':
+    foreach($arrPoints as $intKey=>$oMapPoint)
+    {
+      if ( !empty($oMapPoint->y) && !empty($oMapPoint->x) )
+      {
+      $y = $oMapPoint->y;
+      $x = $oMapPoint->x;
+      break;
+      }
+    }
+    break;
+  case 'last':
+    foreach($arrPoints as $intKey=>$oMapPoint)
+    {
+      if ( !empty($oMapPoint->y) && !empty($oMapPoint->x) )
+      {
+      $y = $oMapPoint->y;
+      $x = $oMapPoint->x;
+      }
+    }
+    break;
+  }
+  return array('y'=>floatval($y),'x'=>floatval($x));
+}

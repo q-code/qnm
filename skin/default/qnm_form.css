@@ -1,0 +1,63 @@
+h1.patching,
+h1.patchinghelp {text-align:right}
+
+table.patch {margin:15px 0 10px 0; width:100%;}
+table.patch tr {}
+table.patch td {vertical-align:top}
+td.patchcheckbox {width:25px}
+td.patchitem {width:45%;background-color:#eeeeee; border:solid 1px #cccccc; border-radius:4px; padding:5px}
+td.patchlink {text-align:center}
+
+table.links {width:100%;}
+table.links td {padding:1px 3px}
+tr.links.checked {background-color:#ffff99}
+tr.links:hover {background-color:#eeeeee}
+tr.links.checked:hover{background-color:#ffff77}
+td.linkcheckbox {width:25px}
+td.linkitem {width:45%}
+td.linklink {text-align:center}
+
+div.patchinghelp {margin:0 10px 0 0; padding:10px; background-color:#ffffff; border:1px solid #e0e0e0; border-radius:10px}
+div.patching {margin:0 0 0 10px; padding:10px; background-color:#FEFFAF; border:1px solid #e0e0e0; border-radius:10px}
+
+p.patchitem1, p.patchitem2 {margin:0 0 5px 0; background-color:#eeeeee; border:solid 1px #cccccc; border-radius:3px; padding:2px 3px; font-weight:bold}
+p.patchitem1 {text-align:right}
+p.patchitem2 {text-align:left}
+table.patchitem {margin:0 auto 15px auto; border-spacing:15px 0}
+td.patchitem1, td.patchitem2 {width:200px; vertical-align:top}
+
+.innercolor {background-color:#BFFFBF}
+.outercolor {background-color:#FFBD6F}
+
+/* Add document */
+
+div.formdocs.header {float:left; width:480px}
+div.formdocs.itemselect {margin:0 0 0 auto; width:300px}
+div.formdocs.itemselect h1 {font-size:12pt; margin:0; padding:0}
+
+/* MEDIA SIZE */
+
+@media screen and (min-width:1024px)
+{
+  div.formdocs.header {width:550px}
+}
+
+/* Small screen */
+
+@media screen and (min-width:601px) and (max-width:870px)
+{
+  h1 {font-size:12t}
+  div.formdocs.header {width:290px}
+  div.formdocs.itemselect {margin:0 0 0 auto;padding:7px; width:290px}
+}
+
+/* Extra small screen */
+
+@media handheld,screen and (max-width:600px)
+{
+  h1 {font-size:12t}
+  div.formdocs.header {float:none; width:auto}
+  div.formdocs.itemselect {width:auto}
+  img.doc_N  {max-width:250px; max-height:125px}/* image normal */
+  
+}

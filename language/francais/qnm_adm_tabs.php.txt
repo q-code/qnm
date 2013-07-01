@@ -1,0 +1,3 @@
+Vous pouvez ici définir les TABS (panneaux) que vous désirez utiliser dans cette section ainsi que leur order. Les panneaux 'Ticket', 'Messages' et 'Documents' sont obligatoires; vous pouver ajouter ou créer d'autres tabs. Un tab peut être non-visible: c-à-d. accessible pour les membres du staff uniquement. Voyez la page Editer pour définir les traductions.
+
+

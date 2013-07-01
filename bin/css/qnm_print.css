@@ -1,0 +1,106 @@
+/* GENERIC */
+body {max-width:800px}
+p,select,input,textarea,td,th,a,h1,h2,span, div {font-family:Arial, sans-serif;font-size:9pt; text-decoration:none}
+h1,h2 {font-size:12pt; margin:10px 0}
+img {border-width:0; vertical-align:middle}
+td {text-align:left; vertical-align:middle}
+
+.small {font-size:8pt}
+
+table.hidden {width:100%; margin:0; border-width:0}
+td.hidden {padding:0; vertical-align:top}
+
+/* BANNER FOOTER */
+
+div.banner {width:100%; border-width:0 0 3px 0; border-style:solid; border-color:#000080}
+div.banner_in {vertical-align:bottom; padding:1px}
+img.banner_logo {width:150px; height:50px; border-width:0}
+
+div.footer {width:100%; border-width:3px 0 0 0; border-style:solid; border-color:#000080}
+p.footer_copy {border-width:3px 0 0 0; border-style:solid; border-color:#000080; text-align:right}
+
+/* TABLE DATA */
+
+table.data_t,
+table.data_s {margin:0; border:solid 1px #000000; width:100%}
+td.th_o, td.th_t {border-bottom:solid 1px #aaaaaa; padding:3px 6px; background-color:#dedede; color:inherit}
+td.td_o, td.td_t {border-bottom:solid 1px #aaaaaa; padding:3px 6px; vertical-align:middle}
+
+td.td_t_ico {text-align:center; width:25px}
+td.td_t_smi {text-align:center; width:20px}
+td.td_t_ref {width:40px}
+td.td_t_inf {font-size:8pt}
+
+td.lettres { border:solid 1px #999999; text-align:center}
+td.lettres a { color:#999999}
+td.active {font-weight:bold}
+
+p.imgcaption {margin:2px}
+
+p.msgbody {margin:0}
+p.msgsign {margin:10px 0 0 0}
+p.msgtitle {margin:0; font-size:8pt; font-weight:bold}
+
+div.tags {margin:2px 0}
+
+/* GRAPH */
+
+table.qtgraph {color:inherit; background-color:white; border:solid 1px #aaaaaa; padding:5px; margin:5px auto 5px auto}
+td.qtgraph_title {text-align:center}
+tr.qtgraph_bar {vertical-align:bottom}
+td.qtgraph_bar {vertical-align:bottom; color:inherit; background-color:#eeeeee; text-align:center}
+td.qtgraph_label {font-size:6pt; text-align:center}
+td.qtgraph_serie {text-align:center}
+td.qtgraph_value_1 {color:#000000; background-color:inherit; font-size:6pt; text-align:center}
+img.qtgraph_bar_1 {vertical-align:bottom; color:inherit; background-color:#000066}
+td.qtgraph_value_2 {color:#000000; background-color:inherit; font-size:6pt; text-align:center}
+img.qtgraph_bar_2 {vertical-align:bottom; color:inherit; background-color:#990099}
+td.qtgraph_value_3 {color:#000000; background-color:inherit; font-size:6pt; text-align:center}
+img.qtgraph_bar_3 {vertical-align:bottom; color:inherit; background-color:#009999}
+
+/* OTHER */
+
+div.picboxmsg
+{
+width:140px; min-height:50px;
+float:right;
+padding:4px;
+margin:2px;
+text-align:center;
+border:1px solid #DDDDDD;
+color:inherit; background-color:white;
+}
+
+/* TABS */
+
+table.tab {margin:0; width:100%; border-width:0}
+tr.tab {}
+td.tab {text-align:center; font-size:8pt; font-weight:bold}
+ td.tab_a {width:80px; padding:4px; color:inherit; background-color:#e2e2e2; border-color:#ffffff #999999 #b4b4b4 #ffffff; border-style:solid; border-width:1px}
+ td.tab_a_on {width:80px; padding:4px; color:#555555; background-color:#ffffff; border-style:solid; border-width:1px; border-color:#aaaaaa #aaaaaa #ffffff #aaaaaa}
+ td.tab_begin {width:5px; border-bottom:solid 1px #AAAAAA}
+ td.tab_end {border-bottom:solid 1px #AAAAAA}
+a.tab {font-size:8pt; font-weight:bold}
+
+table.pan {width:100%}
+tr.pan {}
+td.pan {padding:0}
+div.pan_top {margin:5px 0 10px 0; padding:0; text-align:right; font-size:12pt; font-weight:bold; font-style:italic; border-top:solid 2px #aaaaaa}
+div.pan_bot {margin:15px 0 0 0; padding:0; text-align:right}
+
+table.doc {margin:0; width:100%; border-width:0}
+tr.doc {vertical-align:bottom}
+td.doc {padding:5px; text-align:center; width:50%}
+td.doc_form {padding:5px; text-align:center; border-top:solid 1px #eeeeee; border-bottom:solid 1px #eeeeee}
+
+img.doc_C {max-width:150px; max-height:75px; border:solid 1px #dddddd; padding:3px}/* image compact */
+img.doc_N {max-width:350px; max-height:175px; border:solid 1px #dddddd; padding:5px}/* image normal */
+
+/* FIELD */
+
+table.field {margin:0; width:100%; border-width:0}
+tr.field {}
+td.field {padding:2px 5px 5px 2px; vertical-align:top}
+td.fieldname {width:125px; text-align:right; font-size:8pt; font-weight:bold; color:#000000; background-color:#dedede}
+td.fieldform {}
+td.fieldhelp {font-size:8pt; color:#333399; background-color:inherit}

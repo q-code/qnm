@@ -1,0 +1,1 @@
+Welcome to Q-NetManagement. If this is your first visit, be sure to check out the <a class="welcome" href="qnm_faq.php">FAQ</a>. You may have to register before you can use most of the functions: click the <a class="welcome" href="qnm_user_new.php">register</a> link to know how to proceed.
